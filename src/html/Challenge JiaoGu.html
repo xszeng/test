@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!DOCTYPE HTML><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>挑战角谷</title>
+	<head>
+		<style type="text/css">
+			.btn {
+				BORDER-RIGHT: #7b9ebd 1px solid;
+				PADDING-RIGHT: 2px;
+				BORDER-TOP: #7b9ebd 1px solid;
+				PADDING-LEFT: 2px;
+				FONT-SIZE: 25px;
+				FILTER: progid :DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#cecfde);
+				BORDER-LEFT: #7b9ebd 1px solid;
+				CURSOR: hand;
+				COLOR: black;
+				PADDING-TOP: 2px;
+				BORDER-BOTTOM: #7b9ebd 1px solid
+			}
+			.goBtn {
+				BORDER-RIGHT: #7b9ebd 1px solid;
+				PADDING-RIGHT: 2px;
+				BORDER-TOP: #7b9ebd 1px solid;
+				PADDING-LEFT: 2px;
+				FONT-SIZE: 18px;
+				FILTER: progid :DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#cecfde);
+				BORDER-LEFT: #7b9ebd 1px solid;
+				CURSOR: hand;
+				COLOR: black;
+				PADDING-TOP: 2px;
+				BORDER-BOTTOM: #7b9ebd 1px solid
+			}
+		</style>
+		<script type="text/javascript">
+
+			var rightAnswer;
+			var beginTime;
+			function compute(seedValue) {
+				var seed = seedValue;
+				if(seed % 2 == 0) {
+					rightAnswer = seed / 2;
+					
+				    var answersArray = new Array();
+				    answersArray[0] = seed / 2 + 1;
+				    answersArray[1] = seed / 2 - 1;
+				    answersArray[2] = seed / 2;
+				    answersArray[3] = seed / 2 + 2;
+				    
+				    var shuffledArray = shuffle(answersArray);
+					$("one").value = shuffledArray[0];
+					$("two").value = shuffledArray[1];
+					$("three").value = shuffledArray[2];
+					$("four").value = shuffledArray[3];
+				} else {
+					rightAnswer = seed * 3 + 1;
+					
+					 var answersArray = new Array();
+					answersArray[0] = seed * 3;
+				    answersArray[1] = seed * 3 + 1;
+				    answersArray[2] = seed * 3 - 1;
+				    answersArray[3] = seed * 3 + 2;
+				    
+				    var shuffledArray = shuffle(answersArray);
+					$("one").value = shuffledArray[0];
+					$("two").value = shuffledArray[1];
+					$("three").value = shuffledArray[2];
+					$("four").value = shuffledArray[3];
+				}
+
+				if(rightAnswer == 1) {
+					var costMillionSeconds = new Date().getTime() - beginTime.getTime();
+					alert("恭喜你，征服了数字：" + $("seed").value + "，耗时：" + costMillionSeconds + " 毫秒.");
+					initValue();
+				}
+
+			};
+
+			function computeSeed() {
+				beginTime = new Date();
+				
+				var seed = $("seed").value;
+				compute(seed);
+			};
+
+			function answer(e) {
+				var selectAnswer = Number(e.srcElement.value);
+				if(selectAnswer != rightAnswer) {
+					alert("很遗憾，你没有征服数字：" + $("seed").value + ", 重新开始挑战吧！");
+					initValue();
+				} else {
+					compute(selectAnswer);
+				}
+			};
+
+			function initValue() {
+				$("one").value = 27;
+				$("two").value = 27;
+				$("three").value = 27;
+				$("four").value = 27;
+			}
+			
+			function $(id) {
+				return document.getElementById(id);
+			}
+			
+			function shuffle(sourcrArray) {
+				var indexShuffleArray = generatedRandomIndex(sourcrArray.length);
+				var result = new Array();
+				for (var i=0; i < sourcrArray.length; i++) {
+				  result[indexShuffleArray[i]] = sourcrArray[i];
+				};
+				
+				return result;
+			}
+			
+			function generatedRandomIndex(size) {
+				var indexShuffleArray = new Array();
+				
+				var numberLength = size.toString().length;
+				while(true) {
+					if(indexShuffleArray.length >= size) {
+						break;
+					}
+					
+					var index = (Math.ceil(Math.random() * Math.pow(10, numberLength)))%size;
+					if(indexOf(indexShuffleArray, index) == -1) {
+						indexShuffleArray[indexShuffleArray.length] = index;
+					}
+				}
+
+				return indexShuffleArray;	
+			}
+			
+			function indexOf(array, element) {
+				for (var i=0; i < array.length; i++) {
+				   if(array[i] == element) {
+				   		return i;
+				   }
+				};
+
+				return -1;
+			}
+		</script>
+	</head>
+	<body bgcolor="pink">
+		<table id="seedtable">
+			<tr>
+				<td><label>挑战数:</label></td>
+				<td>
+				<input type="number" id="seed" size="30"/>
+				</td>
+				<td>
+				<button type="button" id="beginBtn" class="goBtn" onclick="computeSeed()">
+					Go!
+				</button></td>
+			</tr>
+		</table>
+		<table id="selectTable" cellspacing="60">
+			<tr>
+				<td>
+				<input type="submit" id="one" class="btn" value="27" onclick="answer(event)" />
+				</td>
+				<td>
+				<input type="submit" id="two" class="btn" value="27"  onclick="answer(event)" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input type="submit" id="three" class="btn" value="27"  onclick="answer(event)" />
+				</td>
+				<td>
+				<input type="submit" id="four" class="btn"  value="27" onclick="answer(event)" />
+				</td>
+			</tr>
+		</table>
+		<div style="border-top:1px solid #000">
+			<pre id="question">
+<font size="4" style="font-family: Microsoft YaHei">
+1976年的一天，《华盛顿邮报》于
+头版头条报道了一条数学新闻.
+文中记叙了这样一个故事：
+70年代中期，美国各所名牌大学校园内，
+人们都像发疯一般，
+夜以继日，
+废寝忘食地
+玩弄一种数学游戏。。。
+这个游戏十分简单：
+
+任意写出一个自然数N，
+并且按照以下的规律进行变换：
+如果是个奇数，则下一步变成3N+1。
+如果是个偶数，则下一步变成N/2。
+不单单是学生，
+甚至连教师、
+研究员、
+教授与学究都纷纷加入。
+为什么这种游戏的魅力经久不衰？
+因为人们发现，
+无论N是怎样一个数字，
+最终都无法逃脱回到谷底1。
+
+准确地说，
+是无法逃出落入底部的4-2-1循环，
+永远也逃不出这样的宿命。
+
+这就是著名的“角谷猜想”，详细可看<a href="http://baike.baidu.com/link?url=ZGU6XyAJ01x3AW8zFAIrXkbOwApiSsSAMXvQDUFTF0HivzOmV3dFZZB0viv8Ai6fjoueY_Xe88lFrkpl4aWIn7DrAZGHlo29MF-oEUQtKb_q9z0TIEQowgurC3jahmrx7cOgm_kB4EJvhCxpZbGHd4ikf8ZcleEHqKibhP3_64WbWBM1u4BrYmDytJtjuVos">这里</a>。
+</font>
+<font size="6" color="red" style="font-family: Microsoft YaHei">挑战一下吧!</font>
+<br />
+<br />
+<center>Powered By worldlxy@gmail.com 2016-1-1</center>
+</pre>
+		</div>
+	</body>
+</html>
